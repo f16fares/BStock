@@ -14,6 +14,21 @@ namespace BStock.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    ProductId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<int>(type: "int", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.ProductId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Receipts",
                 columns: table => new
                 {
@@ -23,11 +38,7 @@ namespace BStock.Migrations
                     HeaderNotes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MarketName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Contact = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UnitPrice = table.Column<int>(type: "int", nullable: false),
-                    TotalPrice = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    BodyNotes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Contact = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -48,21 +59,21 @@ namespace BStock.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
+                name: "ReceiptProduct",
                 columns: table => new
                 {
-                    ProductId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: true)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<int>(type: "int", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UnitPrice = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    BodyNotes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ReceiptId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.ProductId);
+                    table.PrimaryKey("PK_ReceiptProduct", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_Receipts_ReceiptId",
+                        name: "FK_ReceiptProduct_Receipts_ReceiptId",
                         column: x => x.ReceiptId,
                         principalTable: "Receipts",
                         principalColumn: "Id");
@@ -70,18 +81,18 @@ namespace BStock.Migrations
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "ProductId", "Notes", "Price", "ProductName", "ReceiptId" },
+                columns: new[] { "ProductId", "Notes", "Price", "ProductName" },
                 values: new object[,]
                 {
-                    { 1, "", 20, "Pizza", null },
-                    { 2, "", 10, "Salad", null },
-                    { 3, "", 5, "Bread", null },
-                    { 4, "", 1, "Water", null },
-                    { 5, "", 5, "Cola", null },
-                    { 6, "", 10, "Pepsi", null },
-                    { 7, "", 5, "Inc Pen", null },
-                    { 8, "", 10, "Stack of Paper", null },
-                    { 9, "", 10, "Scissors", null }
+                    { 1, "", 20, "Pizza" },
+                    { 2, "", 10, "Salad" },
+                    { 3, "", 5, "Bread" },
+                    { 4, "", 1, "Water" },
+                    { 5, "", 5, "Cola" },
+                    { 6, "", 10, "Pepsi" },
+                    { 7, "", 5, "Inc Pen" },
+                    { 8, "", 10, "Stack of Paper" },
+                    { 9, "", 10, "Scissors" }
                 });
 
             migrationBuilder.InsertData(
@@ -95,8 +106,8 @@ namespace BStock.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_ReceiptId",
-                table: "Products",
+                name: "IX_ReceiptProduct_ReceiptId",
+                table: "ReceiptProduct",
                 column: "ReceiptId");
         }
 
@@ -105,6 +116,9 @@ namespace BStock.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "ReceiptProduct");
 
             migrationBuilder.DropTable(
                 name: "Sections");

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BStock.Migrations
 {
     [DbContext(typeof(StockDbContext))]
-    [Migration("20250418174239_Initail")]
-    partial class Initail
+    [Migration("20250419015538_ReceiptProductRelationship")]
+    partial class ReceiptProductRelationship
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,11 @@ namespace BStock.Migrations
 
             modelBuilder.Entity("BStock.Models.Product", b =>
                 {
-                    b.Property<int>("ProductId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
@@ -42,75 +42,75 @@ namespace BStock.Migrations
                     b.Property<string>("ProductName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ReceiptId")
+                    b.Property<int?>("SectionId")
                         .HasColumnType("int");
 
-                    b.HasKey("ProductId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("ReceiptId");
+                    b.HasIndex("SectionId");
 
                     b.ToTable("Products");
 
                     b.HasData(
                         new
                         {
-                            ProductId = 1,
+                            Id = 1,
                             Notes = "",
                             Price = 20,
                             ProductName = "Pizza"
                         },
                         new
                         {
-                            ProductId = 2,
+                            Id = 2,
                             Notes = "",
                             Price = 10,
                             ProductName = "Salad"
                         },
                         new
                         {
-                            ProductId = 3,
+                            Id = 3,
                             Notes = "",
                             Price = 5,
                             ProductName = "Bread"
                         },
                         new
                         {
-                            ProductId = 4,
+                            Id = 4,
                             Notes = "",
                             Price = 1,
                             ProductName = "Water"
                         },
                         new
                         {
-                            ProductId = 5,
+                            Id = 5,
                             Notes = "",
                             Price = 5,
                             ProductName = "Cola"
                         },
                         new
                         {
-                            ProductId = 6,
+                            Id = 6,
                             Notes = "",
                             Price = 10,
                             ProductName = "Pepsi"
                         },
                         new
                         {
-                            ProductId = 7,
+                            Id = 7,
                             Notes = "",
                             Price = 5,
                             ProductName = "Inc Pen"
                         },
                         new
                         {
-                            ProductId = 8,
+                            Id = 8,
                             Notes = "",
                             Price = 10,
                             ProductName = "Stack of Paper"
                         },
                         new
                         {
-                            ProductId = 9,
+                            Id = 9,
                             Notes = "",
                             Price = 10,
                             ProductName = "Scissors"
@@ -125,9 +125,6 @@ namespace BStock.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BodyNotes")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Contact")
                         .HasColumnType("nvarchar(max)");
 
@@ -140,15 +137,42 @@ namespace BStock.Migrations
                     b.Property<string>("MarketName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.ToTable("Receipts");
+                });
+
+            modelBuilder.Entity("BStock.Models.ReceiptProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BodyNotes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ReceiptId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnitPrice")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiptId");
+
+                    b.ToTable("ReceiptProducts");
                 });
 
             modelBuilder.Entity("BStock.Models.Section", b =>
@@ -184,11 +208,52 @@ namespace BStock.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ProductReceiptProduct", b =>
+                {
+                    b.Property<int>("ProductsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReceiptProductsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductsId", "ReceiptProductsId");
+
+                    b.HasIndex("ReceiptProductsId");
+
+                    b.ToTable("ProductReceiptProduct");
+                });
+
             modelBuilder.Entity("BStock.Models.Product", b =>
                 {
-                    b.HasOne("BStock.Models.Receipt", null)
+                    b.HasOne("BStock.Models.Section", "Section")
+                        .WithMany()
+                        .HasForeignKey("SectionId");
+
+                    b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("BStock.Models.ReceiptProduct", b =>
+                {
+                    b.HasOne("BStock.Models.Receipt", "Receipt")
                         .WithMany("Products")
                         .HasForeignKey("ReceiptId");
+
+                    b.Navigation("Receipt");
+                });
+
+            modelBuilder.Entity("ProductReceiptProduct", b =>
+                {
+                    b.HasOne("BStock.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BStock.Models.ReceiptProduct", null)
+                        .WithMany()
+                        .HasForeignKey("ReceiptProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BStock.Models.Receipt", b =>

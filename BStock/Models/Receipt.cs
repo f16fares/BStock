@@ -13,10 +13,7 @@
 
         // Receipt Body
 
-        public List<Product>? Products { get; set; }
-        public int UnitPrice { get; set; }
-        public int Quantity { get; set; }
-        public int TotalPrice { get { return UnitPrice * Quantity; } }
-        public string? BodyNotes { get; set; }
+        public List<ReceiptProduct>? Products { get; set; }
+        public int TotalAmount => Products.Sum(i => i.TotalPrice);
     }
 }

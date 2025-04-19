@@ -4,6 +4,7 @@ using BStock.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BStock.Migrations
 {
     [DbContext(typeof(StockDbContext))]
-    partial class StockDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250418215745_Initail")]
+    partial class Initail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,11 +27,11 @@ namespace BStock.Migrations
 
             modelBuilder.Entity("BStock.Models.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
@@ -39,75 +42,70 @@ namespace BStock.Migrations
                     b.Property<string>("ProductName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SectionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SectionId");
+                    b.HasKey("ProductId");
 
                     b.ToTable("Products");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            ProductId = 1,
                             Notes = "",
                             Price = 20,
                             ProductName = "Pizza"
                         },
                         new
                         {
-                            Id = 2,
+                            ProductId = 2,
                             Notes = "",
                             Price = 10,
                             ProductName = "Salad"
                         },
                         new
                         {
-                            Id = 3,
+                            ProductId = 3,
                             Notes = "",
                             Price = 5,
                             ProductName = "Bread"
                         },
                         new
                         {
-                            Id = 4,
+                            ProductId = 4,
                             Notes = "",
                             Price = 1,
                             ProductName = "Water"
                         },
                         new
                         {
-                            Id = 5,
+                            ProductId = 5,
                             Notes = "",
                             Price = 5,
                             ProductName = "Cola"
                         },
                         new
                         {
-                            Id = 6,
+                            ProductId = 6,
                             Notes = "",
                             Price = 10,
                             ProductName = "Pepsi"
                         },
                         new
                         {
-                            Id = 7,
+                            ProductId = 7,
                             Notes = "",
                             Price = 5,
                             ProductName = "Inc Pen"
                         },
                         new
                         {
-                            Id = 8,
+                            ProductId = 8,
                             Notes = "",
                             Price = 10,
                             ProductName = "Stack of Paper"
                         },
                         new
                         {
-                            Id = 9,
+                            ProductId = 9,
                             Notes = "",
                             Price = 10,
                             ProductName = "Scissors"
@@ -153,9 +151,6 @@ namespace BStock.Migrations
                     b.Property<string>("BodyNotes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -169,7 +164,7 @@ namespace BStock.Migrations
 
                     b.HasIndex("ReceiptId");
 
-                    b.ToTable("ReceiptProducts");
+                    b.ToTable("ReceiptProduct");
                 });
 
             modelBuilder.Entity("BStock.Models.Section", b =>
@@ -205,57 +200,16 @@ namespace BStock.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ProductReceiptProduct", b =>
-                {
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReceiptProductsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductsId", "ReceiptProductsId");
-
-                    b.HasIndex("ReceiptProductsId");
-
-                    b.ToTable("ProductReceiptProduct");
-                });
-
-            modelBuilder.Entity("BStock.Models.Product", b =>
-                {
-                    b.HasOne("BStock.Models.Section", "Section")
-                        .WithMany()
-                        .HasForeignKey("SectionId");
-
-                    b.Navigation("Section");
-                });
-
             modelBuilder.Entity("BStock.Models.ReceiptProduct", b =>
                 {
-                    b.HasOne("BStock.Models.Receipt", "Receipt")
-                        .WithMany("Products")
+                    b.HasOne("BStock.Models.Receipt", null)
+                        .WithMany("ReceipProducts")
                         .HasForeignKey("ReceiptId");
-
-                    b.Navigation("Receipt");
-                });
-
-            modelBuilder.Entity("ProductReceiptProduct", b =>
-                {
-                    b.HasOne("BStock.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BStock.Models.ReceiptProduct", null)
-                        .WithMany()
-                        .HasForeignKey("ReceiptProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("BStock.Models.Receipt", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("ReceipProducts");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,6 +8,7 @@ namespace BStock.Data
         public DbSet<Section> Sections => Set<Section>();
         public DbSet<Product> Products => Set<Product>();
         public DbSet<Receipt> Receipts => Set<Receipt>();
+        public DbSet<ReceiptProduct> ReceiptProducts => Set<ReceiptProduct>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -33,7 +34,7 @@ namespace BStock.Data
             (
                 new Product
                 {
-                    ProductId = 1,
+                    Id = 1,
                     ProductName = "Pizza",
                     Price = 20,
                     Notes = "",
@@ -41,7 +42,7 @@ namespace BStock.Data
                 },
                 new Product
                 {
-                    ProductId = 2,
+                    Id = 2,
                     ProductName = "Salad",
                     Price = 10,
                     Notes = "",
@@ -49,7 +50,7 @@ namespace BStock.Data
                 },
                 new Product
                 {
-                    ProductId = 3,
+                    Id = 3,
                     ProductName = "Bread",
                     Price = 5,
                     Notes = "",
@@ -57,7 +58,7 @@ namespace BStock.Data
                 },
                 new Product
                 {
-                    ProductId = 4,
+                    Id = 4,
                     ProductName = "Water",
                     Price = 1,
                     Notes = "",
@@ -65,7 +66,7 @@ namespace BStock.Data
                 },
                 new Product
                 {
-                    ProductId = 5,
+                    Id = 5,
                     ProductName = "Cola",
                     Price = 5,
                     Notes = "",
@@ -73,7 +74,7 @@ namespace BStock.Data
                 },
                 new Product
                 {
-                    ProductId = 6,
+                    Id = 6,
                     ProductName = "Pepsi",
                     Price = 10,
                     Notes = "",
@@ -81,7 +82,7 @@ namespace BStock.Data
                 },
                 new Product
                 {
-                    ProductId = 7,
+                    Id = 7,
                     ProductName = "Inc Pen",
                     Price = 5,
                     Notes = "",
@@ -89,7 +90,7 @@ namespace BStock.Data
                 },
                 new Product
                 {
-                    ProductId = 8,
+                    Id = 8,
                     ProductName = "Stack of Paper",
                     Price = 10,
                     Notes = "",
@@ -97,7 +98,7 @@ namespace BStock.Data
                 },
                 new Product
                 {
-                    ProductId = 9,
+                    Id = 9,
                     ProductName = "Scissors",
                     Price = 10,
                     Notes = "",
